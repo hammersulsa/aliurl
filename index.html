@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>알리익스프레스 링크 변환기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      overflow-x: hidden;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+      max-width: 100%;
+      margin: 0 auto;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      resize: none;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      word-wrap: break-word;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #333;
+      color: white;
+    }
+    @media (max-width: 600px) {
+      header, footer {
+        padding: 15px;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>알리익스프레스 링크 변환기</h1>
+  </header>
+  
+  <div class="container">
+    <label for="productUrl">알리익스프레스 상품 URL을 입력하세요:</label>
+    <textarea id="productUrl" placeholder="예: https://ko.aliexpress.com/item/1005004853520171.html"></textarea>
+    
+    <button onclick="generateLinks()">링크 생성</button>
+    
+    <div class="result" id="result" style="display: none;">
+      <p><strong>변경된 링크들:</strong></p>
+      <ul id="linkList">
+        <!-- 4개의 링크가 여기에 추가됩니다 -->
+      </ul>
+    </div>
+
+    <!-- 관리자 모드 -->
+    <div id="adminInfo" style="display: none; margin-top: 20px;">
+      <h3>관리자 정보</h3>
+      <p>실시간 방문자 수: <span id="liveVisitors">0</span></p>
+      <p>누적 방문자 수: <span id="totalVisitors">0</span></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>문의: <a href="mailto:support@example.com" style="color: white;">support@example.com</a></p>
+  </footer>
+
+  <script>
+    let liveVisitorCount = 0;
+    let totalVisitorCount = 0;
+
+    // 관리자 코드 확인
+    function checkAdminMode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const adminCode = urlParams.get('adminCode');
+
+      if (adminCode === '1234') { // 예시 관리자 코드
+        document.getElementById('adminInfo').style.display = 'block';
+        updateVisitorCounts();
+      }
+    }
+
+    // 실시간 및 누적 방문자 수 업데이트
+    function updateVisitorCounts() {
+      liveVisitorCount++;
+      totalVisitorCount++;
+
+      document.getElementById('liveVisitors').textContent = liveVisitorCount;
+      document.getElementById('totalVisitors').textContent = totalVisitorCount;
+    }
+
+    // 상품 링크 생성
+    function generateLinks() {
+      const productUrl = document.getElementById('productUrl').value;
+      if (!productUrl) {
+        alert('상품 URL을 입력해 주세요!');
+        return;
+      }
+
+      // 물음표 뒤의 모든 내용 제거
+      const baseUrl = productUrl.split('?')[0];
+
+      // 할인 이벤트 타입에 맞게 링크 생성
+      const sourceTypes = [
+        { name: "꽁돈대첩", value: "561" },
+        { name: "천원마트", value: "570" },
+        { name: "특가", value: "620" },
+        { name: "기타할인", value: "562" }
+      ];
+
+      // 링크 리스트 초기화
+      const linkList = document.getElementById('linkList');
+      linkList.innerHTML = '';
+
+      // 각 이벤트별 링크 생성
+      sourceTypes.forEach(event => {
+        const newUrl = `${baseUrl}?sourceType=${event.value}`;
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = newUrl;
+        link.target = "_blank";
+        link.textContent = `${event.name} 링크: ${newUrl}`;
+        listItem.appendChild(link);
+        linkList.appendChild(listItem);
+      });
+
+      // 결과를 표시
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+    }
+
+    // 페이지 로드 시 관리자 모드 체크
+    window.onload = function() {
+      checkAdminMode();
+    };
+  </script>
+</body>
+</html>
