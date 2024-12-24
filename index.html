@@ -4,11 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>알리익스프레스 링크 변환기</title>
+  
+  <!-- Normalize.css 추가 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+
   <style>
+    html { height: 100%;}
     body {
       font-family: Arial, sans-serif;
+      position: relative;
       margin: 0;
+      min-height: 100%;
       padding: 0;
+      padding-bottom: 6.74rem;
       background-color: #f4f4f9;
       overflow-x: hidden;
     }
@@ -28,7 +36,7 @@
       overflow: hidden;
     }
     textarea {
-      width: 100%;
+      width: 95%;
       height: 150px;
       padding: 10px;
       margin-bottom: 10px;
@@ -83,6 +91,26 @@
       background-color: #0056b3;
     }
 
+    /* li의 기본 점 제거 */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    #linkList > li {
+      max-width: 100%;
+    }
+    
+    .link-item a {
+      flex: 1;
+      word-wrap: break-word;
+      font-size: 16px;
+      max-width: 65%; /* 화면의 70%를 넘지 않도록 제한 */
+      word-break: break-all; /* 긴 단어가 있을 경우 줄바꿈 허용 */
+      white-space: normal; /* 줄바꿈 가능하도록 설정 */
+    }
+
     /* Toast 알림 스타일 */
     .toast {
       position: fixed;
@@ -98,12 +126,24 @@
       z-index: 1000;
     }
     
+    
+
     footer {
-      text-align: center;
-      padding: 20px;
+      position: absolute;
+      display: flex; /* flexbox 사용 */
+      justify-content: center; /* 수평 가운데 정렬 */
+      align-items: center; /* 수직 가운데 정렬 */
+      padding: 0; /* 불필요한 여백 제거 */
+      margin: 0; /* 불필요한 여백 제거 */
       background-color: #333;
       color: white;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50px; /* 고정 높이 설정 */
+      box-sizing: border-box; /* padding 포함한 전체 너비 설정 */
     }
+
 
     @media (max-width: 600px) {
       header, footer {
@@ -117,7 +157,7 @@
 </head>
 <body>
   <header>
-    <h1>알리익스프레스1 링크 변환기</h1>
+    <h1>알리익스프레스 링크 변환기</h1>
   </header>
   
   <div class="container">
@@ -136,7 +176,7 @@
   </div>
 
   <footer>
-    <p>문의: <a href="mailto:support@example.com" style="color: white;">support@example.com</a></p>
+    <p>문의 : <a href="mailto:support@example.com" style="color: white;">hammersulsa@gmail.com</a></p>
   </footer>
 
   <!-- Toast 알림 -->
@@ -199,7 +239,7 @@
         const link = document.createElement('a');
         link.href = newUrl;
         link.target = "_blank";
-        link.textContent = `${event.name} 링크: ${newUrl}`;
+        link.textContent = `${event.name} : ${newUrl}`;
 
         const copyBtn = document.createElement('button');
         copyBtn.classList.add('copy-btn');
@@ -232,11 +272,23 @@
     }
 
     // 모두 복사
+    // function copyAllLinks() {
+    //   const links = document.querySelectorAll('.link-item a');
+    //   const allLinks = Array.from(links).map(link => link.href).join('\n');
+    //   copyToClipboard(allLinks);
+    // }
+
+
     function copyAllLinks() {
       const links = document.querySelectorAll('.link-item a');
-      const allLinks = Array.from(links).map(link => link.href).join('\n');
+      const allLinks = Array.from(links)
+        .map(link => link.textContent) // 링크의 텍스트(항목: URL 형식)를 가져옴
+        .join('\n');
       copyToClipboard(allLinks);
     }
+
+
+
 
     // Toast 알림 표시 (화면 중앙에 띄우기)
     function showToast() {
