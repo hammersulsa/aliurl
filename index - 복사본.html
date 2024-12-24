@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>알리익스프레스 링크 변환기</title>
   
+  <!-- Normalize.css 추가 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
 
   <style>
@@ -16,9 +17,13 @@
 
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;  /* 1개의 열로 설정 */
+      grid-template-rows: auto 1fr auto;  /* header, content, footer 순서로 행 설정 */
       background-color: #f4f4f9;
+      
+      
     }
 
     header {
@@ -26,6 +31,7 @@
       color: #fff;
       padding: 10px 20px;
       text-align: center;
+      grid-row: 1;
     }
 
     .container {
@@ -35,6 +41,7 @@
       background-color: #fff;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
+      
     }
 
     textarea {
@@ -82,9 +89,9 @@
       flex: 1;
       word-wrap: break-word;
       font-size: 16px;
-      max-width: 65%;
-      word-break: break-all;
-      white-space: normal;
+      max-width: 65%; /* 화면의 70%를 넘지 않도록 제한 */
+      word-break: break-all; /* 긴 단어가 있을 경우 줄바꿈 허용 */
+      white-space: normal; /* 줄바꿈 가능하도록 설정 */
     }
 
     .copy-btn {
@@ -103,6 +110,7 @@
       background-color: #0056b3;
     }
 
+    /* li의 기본 점 제거 */
     ul {
       list-style: none;
       padding: 0;
@@ -114,6 +122,7 @@
       min-height: 10vh;
     }
 
+    /* Toast 알림 스타일 */
     .toast {
       position: fixed;
       top: 50%;
@@ -129,10 +138,11 @@
     }
 
     footer {
-      margin-top: auto;
+      grid-column: 1 / -1;
+      margin-top: auto;  /* content 영역이 적을 때 footer가 아래로 밀려가도록 함 */
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: center;  /* 수평 가운데 정렬 */
+      align-items: center;  /* 수직 가운데 정렬 */
       padding: 0;
       background-color: #333;
       color: white;
@@ -141,25 +151,9 @@
       box-sizing: border-box;
     }
 
-    #openAllBtn {
-      margin-top: 10px; /* 위에 마진 10px 추가 */
-      background-color: #007bff; /* 버튼 색상을 파란색으로 변경 */
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #openAllBtn:hover {
-      background-color: #0056b3; /* 마우스를 올렸을 때 어두운 파란색으로 변경 */
-    }
-
-
     @media (max-width: 600px) {
       header, footer {
-        padding: 0px;
+        padding: 15px;
       }
       .container {
         padding: 15px;
@@ -169,20 +163,21 @@
 </head>
 <body>
   <header>
-    <h2>알리익스프레스 링크 변환기</h2>
+    <h1>알리익스프레스 링크 변환기</h1>
   </header>
   
   <div class="container">
     <label for="productUrl">알리익스프레스 상품 URL을 입력하세요:</label>
     <textarea id="productUrl" placeholder="예: https://ko.aliexpress.com/item/1005004853520171.html"></textarea>
     
-    <button id="generateBtn">링크 생성</button>
+    <button onclick="generateLinks()">링크 생성</button>
     
     <div class="result" id="result" style="display: none;">
       <p><strong>변경된 링크들:</strong></p>
-      <ul id="linkList"></ul>
-      <button id="copyAllBtn">모두 복사</button>
-      <button id="openAllBtn">모두 열기</button> <!-- 모두 열기 버튼 추가 -->
+      <ul id="linkList">
+        <!-- 4개의 링크가 여기에 추가됩니다 -->
+      </ul>
+      <button id="copyAllBtn" onclick="copyAllLinks()">모두 복사</button>
     </div>
   </div>
 
@@ -190,10 +185,32 @@
     <p>문의 : <a href="mailto:support@example.com" style="color: white;">hammersulsa@gmail.com</a></p>
   </footer>
 
+  <!-- Toast 알림 -->
   <div id="toast" class="toast">복사 완료!</div>
 
   <script>
-    let generatedLinks = [];
+    let liveVisitorCount = 0;
+    let totalVisitorCount = 0;
+
+    // 관리자 코드 확인
+    function checkAdminMode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const adminCode = urlParams.get('adminCode');
+
+      if (adminCode === '1234') { // 예시 관리자 코드
+        document.getElementById('adminInfo').style.display = 'block';
+        updateVisitorCounts();
+      }
+    }
+
+    // 실시간 및 누적 방문자 수 업데이트
+    function updateVisitorCounts() {
+      liveVisitorCount++;
+      totalVisitorCount++;
+
+      document.getElementById('liveVisitors').textContent = liveVisitorCount;
+      document.getElementById('totalVisitors').textContent = totalVisitorCount;
+    }
 
     // 상품 링크 생성
     function generateLinks() {
@@ -203,8 +220,10 @@
         return;
       }
 
+      // 물음표 뒤의 모든 내용 제거
       const baseUrl = productUrl.split('?')[0];
 
+      // 할인 이벤트 타입에 맞게 링크 생성
       const sourceTypes = [
         { name: "꽁돈대첩", value: "561" },
         { name: "천원마트", value: "570" },
@@ -212,14 +231,13 @@
         { name: "기타할인", value: "562" }
       ];
 
+      // 링크 리스트 초기화
       const linkList = document.getElementById('linkList');
       linkList.innerHTML = '';
-      generatedLinks = []; // 링크 배열 초기화
 
+      // 각 이벤트별 링크 생성
       sourceTypes.forEach(event => {
         const newUrl = `${baseUrl}?sourceType=${event.value}`;
-        generatedLinks.push(newUrl); // 생성된 링크 배열에 추가
-
         const listItem = document.createElement('li');
         const linkItem = document.createElement('div');
         linkItem.classList.add('link-item');
@@ -232,7 +250,9 @@
         const copyBtn = document.createElement('button');
         copyBtn.classList.add('copy-btn');
         copyBtn.textContent = '복사';
-        copyBtn.onclick = () => copyToClipboard(newUrl);
+        copyBtn.onclick = function(event) {
+          copyToClipboard(newUrl);
+        };
 
         linkItem.appendChild(link);
         linkItem.appendChild(copyBtn);
@@ -240,7 +260,9 @@
         linkList.appendChild(listItem);
       });
 
-      document.getElementById('result').style.display = 'block';
+      // 결과를 표시
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
     }
 
     // 링크 복사
@@ -255,7 +277,6 @@
       showToast();
     }
 
-
     // 모두 복사
     function copyAllLinks() {
       const links = document.querySelectorAll('.link-item a');
@@ -265,24 +286,20 @@
       copyToClipboard(allLinks);
     }
 
-    // 모두 열기
-    function openAllLinks() {
-      generatedLinks.forEach(url => {
-        window.open(url, '_blank'); // 각 링크를 새 탭에서 열기
-      });
-    }
-
-    // Toast 알림 표시
+    // Toast 알림 표시 (화면 중앙에 띄우기)
     function showToast() {
       const toast = document.getElementById('toast');
       toast.style.display = 'block';
-      setTimeout(() => toast.style.display = 'none', 2000);
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2000);  // Toast가 2초 후 자동으로 사라짐
     }
 
-    // 이벤트 리스너
-    document.getElementById('generateBtn').addEventListener('click', generateLinks);
-    document.getElementById('copyAllBtn').addEventListener('click', copyAllLinks);
-    document.getElementById('openAllBtn').addEventListener('click', openAllLinks); // '모두 열기' 버튼 클릭 이벤트 추가
+    // 페이지 로드 시 관리자 모드 체크
+    window.onload = function() {
+      checkAdminMode();
+    };
   </script>
 </body>
 </html>
