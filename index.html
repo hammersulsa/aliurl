@@ -113,6 +113,7 @@
       background-color: #0056b3;
     }
 
+
     ul {
       list-style: none;
       padding: 0;
@@ -184,7 +185,7 @@
   
   <div class="container">
     <label for="productUrl">알리익스프레스 상품 URL을 입력하세요:</label>
-    <textarea id="productUrl" placeholder="예: https://ko.aliexpress.com/item/1005004853520171.html"></textarea>
+    <textarea id="productUrl" placeholder="예: https://ko.aliexpress.com/item/1005004853520171.html&#10;&#10;2025-03-27 업데이트 &#10;     모바일에서 생성된 링크는 클릭시 바로 알리앱으로 열립니다. &#10;     "></textarea>
     
     <button id="generateBtn">링크 생성</button>
     
@@ -192,18 +193,23 @@
       <p><strong>변경된 링크들:</strong></p>
       <ul id="linkList"></ul>
       <button id="copyAllBtn">모두 복사</button>
-      <button id="openAllBtn">모두 열기</button> <!-- 모두 열기 버튼 추가 -->
+      <button id="openAllBtn">모두 열기(PC전용)</button> <!-- 모두 열기 버튼 추가 -->
     </div>
   </div>
 
   <footer>
-    <p>문의 : <a href="mailto:support@example.com" style="color: white;">hammersulsa@gmail.com</a></p>
+    <p>문의 : <a href="mailto:hammersulsa@gmail.com" style="color: white;">hammersulsa@gmail.com</a></p>
   </footer>
 
   <div id="toast" class="toast">복사 완료!</div>
 
   <script>
     let generatedLinks = [];
+
+    //모바일 체크
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
 
     // 상품 링크 생성
     function generateLinks() {
@@ -216,9 +222,9 @@
       const baseUrl = productUrl.split('?')[0];
 
       const sourceTypes = [
+        { name: "코인샵", value: "620&channel=coin" },
         { name: "꽁돈대첩", value: "561" },
         { name: "천원마트", value: "570" },
-        { name: "코인샵", value: "620" },
         { name: "기타할인", value: "562" }
       ];
 
@@ -235,7 +241,12 @@
         linkItem.classList.add('link-item');
 
         const link = document.createElement('a');
-        link.href = newUrl;
+        if (isMobile()) {
+          link.href = "aliexpress://goto?url=" + newUrl; //모바일에서 알리 앱 바로 열기 기능 pc에서는 비활성화 해야함.
+        } else {
+          link.href = newUrl;
+        }
+
         link.target = "_blank";
         link.textContent = `${event.name} : ${newUrl}`;
 
@@ -244,6 +255,7 @@
         copyBtn.textContent = '복사';
         copyBtn.onclick = () => copyToClipboard(newUrl);
 
+        
         linkItem.appendChild(link);
         linkItem.appendChild(copyBtn);
         listItem.appendChild(linkItem);
