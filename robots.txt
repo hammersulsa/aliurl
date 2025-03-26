@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hammersulsa.github.io/aliurl/sitemap.xml

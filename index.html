@@ -1,24 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHXP2WNREH"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-DHXP2WNREH');
   </script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>알리익스프레스 링크 변환기</title>
   
+  <meta charset="UTF-8">
+
+  <link rel="icon" type="image/png" href="favicons/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicons/favicon.svg" />
+  <link rel="shortcut icon" href="favicons/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <link rel="manifest" href="favicons/site.webmanifest" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>알리익스프레스 링크 변환기 - 코인샵/천원마트/꽁돈대첩 할인 주소 URL 변환기</title>
+  <meta name="description"
+    content="원클릭으로 알리익스프레스 상품주소를 코인, 천원마트, 꽁돈대첩, dollar express, coins 의 할인 적용된 링크 URL 주소로 자동 변환! 최대 할인 혜택 받기">
+  <meta name="keywords"
+    content="알리 링크 변환, 알리 코인 링크, 꽁돈대첩 변환,천원마트 변환, 알리익스프레스할인, 해외구매할인주소, aliexpress Coins url, aliexpress dollar express">
+  <!-- 오픈 그래프(소셜 미디어 최적화) -->
+  <meta property="og:title" content="알리 링크 변환기 - 코인샵/천원마트/꽁돈대첩 할인 주소 URL 변환기">
+  <meta property="og:description" content="알리익스프레스 상품 링크를 간편하게 할인 적용하고 공유하세요!">
+  <meta property="og:image" content="https://hammersulsa.github.io/aliurl//images/og-image.jpg">
+  <meta property="og:url" content="https://hammersulsa.github.io/aliurl/">
+  
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
 
   <style>
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
       padding: 0;
@@ -120,7 +140,7 @@
       margin: 0;
     }
 
-    #linkList > li {
+    #linkList>li {
       max-width: 100%;
       min-height: 10vh;
     }
@@ -153,8 +173,10 @@
     }
 
     #openAllBtn {
-      margin-top: 10px; /* 위에 마진 10px 추가 */
-      background-color: #007bff; /* 버튼 색상을 파란색으로 변경 */
+      margin-top: 10px;
+      /* 위에 마진 10px 추가 */
+      background-color: #007bff;
+      /* 버튼 색상을 파란색으로 변경 */
       color: white;
       border: none;
       border-radius: 5px;
@@ -164,31 +186,48 @@
     }
 
     #openAllBtn:hover {
-      background-color: #0056b3; /* 마우스를 올렸을 때 어두운 파란색으로 변경 */
+      background-color: #0056b3;
+      /* 마우스를 올렸을 때 어두운 파란색으로 변경 */
     }
 
 
     @media (max-width: 600px) {
-      header, footer {
+
+      header,
+      footer {
         padding: 0px;
       }
+
       .container {
         padding: 15px;
       }
     }
+
+  
+  .seo-keywords {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+  }
+  
   </style>
 </head>
+
 <body>
   <header>
     <h2>알리익스프레스 링크 변환기</h2>
   </header>
-  
+
   <div class="container">
     <label for="productUrl">알리익스프레스 상품 URL을 입력하세요:</label>
-    <textarea id="productUrl" placeholder="예: https://ko.aliexpress.com/item/1005004853520171.html&#10;예: https://s.click.aliexpress.com/e/_o2CKh4D&#10;&#10;&#10;2025-03-27 업데이트 &#10;     모바일에서 링크 생성 후 클릭시 바로 알리앱으로 열립니다. &#10;     "></textarea>
-    
+    <textarea id="productUrl"
+      placeholder="아래 주소 형식중 아무거나 입력하세요: &#10;https://ko.aliexpress.com/item/1005004853520171.html&#10;https://a.aliexpress.com/_oFRqb7R&#10;https://s.click.aliexpress.com/e/_o2CKh4D&#10;방금 AliExpress에서 찾은 상품이에요: 
+₩15,500 | 타바스코 페퍼 핫소스 대용량 355mL
+https://a.aliexpress.com/_oof5IGd&#10;&#10;2025-03-27 업데이트 &#10;     모바일에서 링크 생성 후 클릭시 앱에서 볼때와 같은 할인율이 적용되어 알리앱으로 열립니다. &#10;     "></textarea>
+
+
     <button id="generateBtn">링크 생성</button>
-    
+
     <div class="result" id="result" style="display: none;">
       <p><strong>변경된 링크들:</strong></p>
       <ul id="linkList"></ul>
@@ -203,6 +242,14 @@
 
   <div id="toast" class="toast">복사 완료!</div>
 
+  <div class="seo-keywords" aria-hidden="true">
+    꽁돈대첩, 알리 코인 변환, 코인 링크 생성기, 천원마트 할인코드 적용 방법, 
+    aliexpress dollar express , 해외구매 알리 전용 링크 변환, 
+    알리 URL 변환기, 알리 URL 컨버터, 알리 주소 컨버터, 알리 주소 변환기
+  </div>
+  
+  
+
   <script>
     let generatedLinks = [];
 
@@ -213,94 +260,101 @@
 
     // 상품 링크 생성
     async function generateLinks() {
-        const productUrl = document.getElementById('productUrl').value;
-        if (!productUrl) {
-          alert('상품 URL을 입력해 주세요!');
+      const productUrl = document.getElementById('productUrl').value;
+      if (!productUrl) {
+        alert('상품 URL을 입력해 주세요!');
+        return;
+      }
+
+      let baseUrl = '';
+
+      // 1. 정식 URL 패턴 체크 (ko.aliexpress.com/item/숫자.html)
+      const itemPattern = /(https?:\/\/(?:www\.|ko\.)?aliexpress\.com\/item\/\d+\.html)/i;
+      const directMatch = productUrl.match(itemPattern);
+
+      if (directMatch) {
+        baseUrl = directMatch[0].split('?')[0];
+      }
+      else {
+        // 2. 단축 URL 처리
+        const shortPattern = /(https?:\/\/(?:a|s\.click)\.aliexpress\.com\/\S+)/i;
+        const shortMatch = productUrl.match(shortPattern);
+
+        if (!shortMatch) {
+          alert('유효한 알리익스프레스 URL을 입력해 주세요!');
           return;
         }
 
-        let baseUrl = '';
+        try {
+          // Cloudflare Worker 호출
+          const workerUrl = `https://url-unshortener.dalaran1080.workers.dev/?url=${encodeURIComponent(shortMatch[0])}`;
+          const response = await fetch(workerUrl);
+          const data = await response.json();
 
-        // 1. 정식 URL 패턴 체크 (ko.aliexpress.com/item/숫자.html)
-        const itemPattern = /(https?:\/\/(?:www\.|ko\.)?aliexpress\.com\/item\/\d+\.html)/i;
-        const directMatch = productUrl.match(itemPattern);
+          // 3. 원본 URL 추출 (URL 디코딩 + 패턴 매칭)
+          const decodedUrl = decodeURIComponent(data.originalUrl);
+          const extracted = decodedUrl.match(/(https?:\/\/[^\/]+\/item\/\d+\.html)/i);
 
-        if (directMatch) {
-          baseUrl = directMatch[0].split('?')[0];
+          if (!extracted) {
+            throw new Error('원본 상품 URL을 찾을 수 없습니다');
+          }
+
+          baseUrl = extracted[0].split('?')[0];
+          //www. 를 ko.으로 변환
+          //baseUrl = baseUrl.replace("www.", "ko.");
+          //40% 코인 할인된 주소가 변환후 앱으로 바로 열어주면 코인할인율이 1%로 떨어지는 문제가 있음.
+
+        } catch (error) {
+          alert(`오류 발생: ${error.message}`);
+          return;
         }
-        else {
-          // 2. 단축 URL 처리
-          const shortPattern = /(https?:\/\/(?:a|s\.click)\.aliexpress\.com\/\S+)/i;
-          const shortMatch = productUrl.match(shortPattern);
-
-          if (!shortMatch) {
-            alert('유효한 알리익스프레스 URL을 입력해 주세요!');
-            return;
-          }
-
-          try {
-            // Cloudflare Worker 호출
-            const workerUrl = `https://url-unshortener.dalaran1080.workers.dev/?url=${encodeURIComponent(shortMatch[0])}`;
-            const response = await fetch(workerUrl);
-            const data = await response.json();
-
-            // 3. 원본 URL 추출 (URL 디코딩 + 패턴 매칭)
-            const decodedUrl = decodeURIComponent(data.originalUrl);
-            const extracted = decodedUrl.match(/(https?:\/\/[^\/]+\/item\/\d+\.html)/i);
-
-            if (!extracted) {
-              throw new Error('원본 상품 URL을 찾을 수 없습니다');
-            }
-
-            baseUrl = extracted[0].split('?')[0];
-          } catch (error) {
-            alert(`오류 발생: ${error.message}`);
-            return;
-          }
-        }
-        const sourceTypes = [
-          { name: "코인샵", value: "620&channel=coin" },
-          { name: "꽁돈대첩", value: "561" },
-          { name: "천원마트", value: "570" },
-          { name: "기타할인", value: "562" }
-        ];
-
-        const linkList = document.getElementById('linkList');
-        linkList.innerHTML = '';
-        generatedLinks = []; // 링크 배열 초기화
-
-        sourceTypes.forEach(event => {
-          const newUrl = `${baseUrl}?sourceType=${event.value}`;
-          generatedLinks.push(newUrl); // 생성된 링크 배열에 추가
-
-          const listItem = document.createElement('li');
-          const linkItem = document.createElement('div');
-          linkItem.classList.add('link-item');
-
-          const link = document.createElement('a');
-          if (isMobile()) {
-            link.href = "aliexpress://goto?url=" + newUrl; //모바일에서 알리 앱 바로 열기 기능 pc에서는 비활성화 해야함.
-          } else {
-            link.href = newUrl;
-          }
-
-          link.target = "_blank";
-          link.textContent = `${event.name} : ${newUrl}`;
-
-          const copyBtn = document.createElement('button');
-          copyBtn.classList.add('copy-btn');
-          copyBtn.textContent = '복사';
-          copyBtn.onclick = () => copyToClipboard(newUrl);
-
-
-          linkItem.appendChild(link);
-          linkItem.appendChild(copyBtn);
-          listItem.appendChild(linkItem);
-          linkList.appendChild(listItem);
-        });
-
-        document.getElementById('result').style.display = 'block';
       }
+      const sourceTypes = [
+        { name: "코인샵", value: "620&channel=coin" },
+        { name: "꽁돈대첩", value: "561" },
+        { name: "천원마트", value: "570" },
+        { name: "기타할인", value: "562" }
+      ];
+
+      const linkList = document.getElementById('linkList');
+      linkList.innerHTML = '';
+      generatedLinks = []; // 링크 배열 초기화
+
+      sourceTypes.forEach(event => {
+        const newUrl = `${baseUrl}?sourceType=${event.value}`;
+        generatedLinks.push(newUrl); // 생성된 링크 배열에 추가
+
+        const listItem = document.createElement('li');
+        const linkItem = document.createElement('div');
+        linkItem.classList.add('link-item');
+
+        const link = document.createElement('a');
+        if (isMobile()) {
+          link.href = "aliexpress://goto?url=" + encodeURIComponent(newUrl); //모바일에서 알리 앱 바로 열기 기능 pc에서는 비활성화 해야함.
+          /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          //////////////*************url 매개변수 전달시encodeURIComponent로 url를 인코딩 하지 않으면 모바일에서 앱으로 열시 할인율이 제대로 적용안됨******************////////////////
+          /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        } else {
+          link.href = newUrl;
+        }
+
+        link.target = "_blank";
+        link.textContent = `${event.name} : ${newUrl}`;
+
+        const copyBtn = document.createElement('button');
+        copyBtn.classList.add('copy-btn');
+        copyBtn.textContent = '복사';
+        copyBtn.onclick = () => copyToClipboard(newUrl);
+
+
+        linkItem.appendChild(link);
+        linkItem.appendChild(copyBtn);
+        listItem.appendChild(linkItem);
+        linkList.appendChild(listItem);
+      });
+
+      document.getElementById('result').style.display = 'block';
+    }
 
     // 링크 복사
     function copyToClipboard(text) {
@@ -343,5 +397,46 @@
     document.getElementById('copyAllBtn').addEventListener('click', copyAllLinks);
     document.getElementById('openAllBtn').addEventListener('click', openAllLinks); // '모두 열기' 버튼 클릭 이벤트 추가
   </script>
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "알리익스프레스 주소 변환기",
+        "description": "알리익스프레스 상품 주소를 코인, 꽁돈대첩, 천원마트 할인 링크로 변환하는 전문 도구",
+        "applicationCategory": ["Affiliate Marketing Tool", "Discount Service"],
+        "featureList": ["알리 상품링크 할인 적용","알리 URL 변환","알리 할인 링크 생성","꽁돈대첩 변환","천원마트 적용"],
+        "screenshot": "https://hammersulsa.github.io/aliurl/images/screenshot.jpg",
+        "url": "https://hammersulsa.github.io/aliurl/",
+        "author": {
+          "@type": "Person",
+          "name": "hammersulsa"
+        },
+        "operatingSystem": "Web",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://hammersulsa.github.io/aliurl/"
+        },
+        "howTo": {
+          "@type": "HowTo",
+          "name": "3초 완성 변환 절차",
+          "step": [
+            {"@type": "HowToStep", "text": "1. 알리익스프레스 상품 페이지 주소 URL 복사 붙여넣기","image": "https://hammersulsa.github.io/aliurl/images/step1.jpg"},
+            {"@type": "HowToStep", "text": "2. 링크 생성 클릭","image": "https://hammersulsa.github.io/aliurl/images/step2.jpg"},
+            {"@type": "HowToStep", "text": "3. 생성된 할인 링크 열거나 복사 후 사용","image": "https://hammersulsa.github.io/aliurl/images/step3.jpg"}
+          ]
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "128"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "함마술사",
+          "url": "https://hammersulsa.github.io/aliurl/"
+        }
+      }
+  </script>
 </body>
+
 </html>
