@@ -486,8 +486,17 @@
                     }
                 }
 
-                // 줄바꿈 보존을 위해 텍스트 노드로 삽입하고 HTML 이스케이프 처리
-                resultBox.textContent = resultText;
+                // 줄바꿈 보존 및 복호화 시 URL 링크 연결 처리
+                if (currentMode === 'encrypt') {
+                    resultBox.textContent = resultText;
+                } else {
+                    const escaped = escapeHtml(resultText);
+                    const urlRegex = /(https?:\/\/[^\s"'<>\(\)]+)/g;
+                    const htmlWithLinks = escaped.replace(urlRegex, function(url) {
+                        return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline; word-break: break-all;">${url}</a>`;
+                    });
+                    resultBox.innerHTML = htmlWithLinks;
+                }
                 resultContainer.style.display = 'block';
 
             } catch (e) {
@@ -531,6 +540,18 @@
             toastTimeout = setTimeout(() => {
                 toast.classList.remove('show');
             }, 2500);
+        }
+
+        // HTML 특수문자 이스케이프 함수 (XSS 방지)
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
     </script>
 </body>
